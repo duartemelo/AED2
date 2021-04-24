@@ -1,2 +1,2 @@
 # AED2
-Trabalho prático AED2, IPCA
+Trabalho prático da cadeira Algoritmos e Estruturas de Dados 2, IPCA
