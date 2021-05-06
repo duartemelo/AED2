@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "structs.h"
 
 #pragma region Parts
@@ -9,28 +10,53 @@ PartsList *new_parts_list()
 {
     PartsList *new = (PartsList *)malloc(sizeof(PartsList));
     assert(new);
-
     new->first = new->last = NULL;
     return new;
 }
 
-Part add_part(PartsList *list, Part *part){
+void add_part(PartsList *list, Part *item)
+{
+
     //se ainda não existir nenhum elemento na lista
-    if(list->first == NULL){
-        list->first = part;
-        part->next = NULL;
-        part->prev = NULL;
-    } else {
-        Part *partAux = list->first;
-        while (partAux->next){
-            partAux = partAux->next;
-        }
-        //neste momento partAux será o ultimo elemento da lista
-        part->prev = partAux;
-        partAux->next = part;
-        list->last = part;
+    if (list->first == NULL)
+    {
+        list->first = item;
+        item->next = NULL;
+        item->prev = NULL;
     }
-    return *part;
+    else
+    {
+        list->last->next = item;
+        item->prev = list->last;
+        item->next = NULL;
+    }
+    list->last = item;
+}
+
+void change_part_data(Part *part, char *part_num, char *name, char *part_class, int stock)
+{
+    part->part_num = part_num;
+    part->name = name;
+    part->part_class = part_class;
+    part->stock = stock;
+}
+
+void print_part_data(Part *part)
+{
+    printf("Part_num: %s\n", part->part_num);
+    printf("Part_name: %s\n", part->name);
+    printf("Part_class: %s\n", part->part_class);
+    printf("Part_stock: %d\n", part->stock);
+}
+
+void print_part_list(PartsList *parts)
+{
+    Part *lst = parts->first;
+    while (lst)
+    {
+        printf("%s\n", lst->name);
+        lst = lst->next;
+    }
 }
 
 #pragma endregion
@@ -44,6 +70,24 @@ PartsSetList *new_parts_sets_list()
 
     new->first = new->last = NULL;
     return new;
+}
+
+void add_parts_set(PartsSetList *list, PartsSet *item)
+{
+    //se ainda não existir nenhum elemento na lista
+    if (list->first == NULL)
+    {
+        list->first = item;
+        item->next = NULL;
+        item->prev = NULL;
+    }
+    else
+    {
+        list->last->next = item;
+        item->prev = list->last;
+        item->next = NULL;
+    }
+    list->last = item;
 }
 
 #pragma endregion

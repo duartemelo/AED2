@@ -6,11 +6,11 @@
  * Stock: stock da peça existente.
  */
 typedef struct _part{
-    int part_num;
+    char *part_num;
     char *name;
     char *part_class;
     int stock;
-    struct _parts *next, *prev;
+    struct _part *next, *prev;
 } Part;
 
 /**
@@ -29,10 +29,10 @@ typedef struct _partsList{
  * part_num: Identificação da peça.
  */
 typedef struct _partsSet{
-    int set_num;
+    char *set_num;
     int quantity;
     int part_num;
-    struct _partsSetList *next, *prev;
+    struct _partsSet *next, *prev;
 } PartsSet;
 
 /**
@@ -52,11 +52,11 @@ typedef struct _partsSetList{
  * theme: Tema do set.
  */
 typedef struct _set{
-    int set_num;
+    char *set_num;
     char *name;
     int year;
     char *theme;
-    struct _setList *next, *prev;
+    struct _set *next, *prev;
 } Set;
 
 /**
