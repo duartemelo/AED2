@@ -5,5 +5,6 @@
 int main()
 {
     PartsList parts = *new_parts_list();
+    
     return 0;
 }
