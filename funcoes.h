@@ -25,6 +25,7 @@ extern void print_partset_list(PartsSetList *partsset);
 extern void parts_in_partsset_per_class(PartsSetList *list, PartsList *parts, char *part_class, char *set_num);
 extern void parts_to_build_set(PartsSetList *list, PartsList *parts, char *set_num);
 extern void parts_quantity_to_build_set(PartsSetList *list, char *set_num);
+extern void add_stock_from_partsset(PartsSetList *list, char *set_num, PartsList *parts);
 
 #pragma endregion
 

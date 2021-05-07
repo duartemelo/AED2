@@ -79,6 +79,7 @@ int total_stock(PartsList *parts)
     while (lst)
     {
         stock = stock + lst->stock;
+        lst = lst->next;
     }
     return stock;
 }
