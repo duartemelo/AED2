@@ -1,6 +1,5 @@
 
 
-
 #pragma region Parts
 
 extern PartsList *new_parts_list();
@@ -10,6 +9,7 @@ extern void change_part_data(Part *part, char *part_num, char *name, char *part_
 extern void print_part_data(Part *part);
 extern void print_part_list(PartsList *parts);
 extern void change_stock(Part *part, int newStock);
+extern int total_stock(PartsList *parts);
 
 #pragma endregion
 
@@ -21,6 +21,9 @@ extern void add_parts_set(PartsSetList *list, PartsSet *item);
 extern void change_parts_set_data(PartsSet *partset, char *set_num, int quantity, char *part_num);
 extern void print_parts_set_data(PartsSet *partset);
 extern void print_partset_list(PartsSetList *partsset);
+extern void parts_in_partsset_per_class(PartsSetList *list, PartsList *parts, char *part_class, char *set_num);
+extern void parts_to_build_set(PartsSetList *list, PartsList *parts, char *set_num);
+extern void parts_quantity_to_build_set(PartsSetList *list, char *set_num);
 
 #pragma endregion
 
@@ -35,7 +38,4 @@ extern void print_set_list(SetList *sets);
 extern void organize_setsList_per_year(SetList *sets);
 extern void print_sets_per_theme_year(SetList *sets, char *theme);
 
-
 #pragma endregion
-
-

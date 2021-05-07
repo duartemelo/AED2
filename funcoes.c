@@ -71,6 +71,17 @@ void change_stock(Part *part, int newStock)
     change_part_data(part, part->part_num, part->name, part->part_class, newStock);
 }
 
+int total_stock(PartsList *parts)
+{
+    int stock = 0;
+    Part *lst = parts->first;
+    while (lst)
+    {
+        stock = stock + lst->stock;
+    }
+    return stock;
+}
+
 #pragma endregion
 
 #pragma region Parts Sets
@@ -131,6 +142,71 @@ void print_partset_list(PartsSetList *partsset)
         print_parts_set_data(lst);
         lst = lst->next;
     }
+}
+
+void parts_in_partsset_per_class(PartsSetList *list, PartsList *parts, char *part_class, char *set_num)
+{
+    PartsSet *lst = list->first;
+    Part *part = parts->first;
+    while (lst)
+    {
+        if (strcmp(lst->set_num, set_num) == 0)
+        {
+            while (part)
+            {
+                if (strcmp(part->part_class, part_class) == 0)
+                {
+                    print_part_data(part);
+                }
+                part = part->next;
+            }
+        }
+        lst = lst->next;
+    }
+}
+
+void parts_to_build_set(PartsSetList *list, PartsList *parts, char *set_num)
+{
+    int found;
+    PartsSet *lst = list->first;
+    while (lst)
+    {
+        if (strcmp(lst->set_num, set_num) == 0)
+        {
+            found = 0;
+            char *part_num = lst->part_num;
+            Part *part = parts->first;
+            while (part && found != 0)
+            {
+                if (strcmp(part->part_num, part_num) == 0)
+                {
+                    print_part_data(part);
+                    found = 1;
+                }
+                part = part->next;
+            }
+        }
+        lst = lst->next;
+    }
+}
+
+void parts_quantity_to_build_set(PartsSetList *list, char *set_num)
+{
+    int totalAmount = 0;
+    PartsSet *lst = list->first;
+    while (lst)
+    {
+
+        if (strcmp(lst->set_num, set_num) == 0)
+        {
+            printf("%s\n", lst->part_num);
+            printf("%d\n", lst->quantity);
+            totalAmount += lst->quantity;
+        }
+
+        lst->next;
+    }
+    printf("Total quantity of parts: %d\n", &totalAmount);
 }
 
 #pragma endregion
@@ -199,14 +275,17 @@ void print_set_list(SetList *sets)
 
 void organize_setsList_per_year(SetList *sets)
 {
-    
-    Set *lst = sets->first; 
-    Set *lst2 = sets->first->next;     
 
-    while (lst){
+    Set *lst = sets->first;
+    Set *lst2 = sets->first->next;
+
+    while (lst)
+    {
         lst2 = lst->next;
-        while(lst2){
-            if (lst2->year < lst->year){ 
+        while (lst2)
+        {
+            if (lst2->year < lst->year)
+            {
                 char *set_num = lst->set_num;
                 char *name = lst->name;
                 int year = lst->year;
@@ -215,17 +294,10 @@ void organize_setsList_per_year(SetList *sets)
                 change_set_data(lst2, set_num, name, year, theme);
             }
             lst2 = lst2->next;
-            
         }
         lst = lst->next;
-        
-        
-    }   
-
-
+    }
 }
-
-
 
 void print_sets_per_theme_year(SetList *sets, char *theme)
 {
@@ -241,11 +313,8 @@ void print_sets_per_theme_year(SetList *sets, char *theme)
         }
         lst = lst->next;
     }
-    organize_setsList_per_year(organizedSetList); 
+    organize_setsList_per_year(organizedSetList);
     print_set_list(organizedSetList);
-    
 }
-
-
 
 #pragma endregion
