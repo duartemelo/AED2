@@ -66,6 +66,11 @@ void print_part_list(PartsList *parts)
     }
 }
 
+void change_stock(Part *part, int newStock)
+{
+    change_part_data(part, part->part_num, part->name, part->part_class, newStock);
+}
+
 #pragma endregion
 
 #pragma region Parts Sets
@@ -191,5 +196,56 @@ void print_set_list(SetList *sets)
         lst = lst->next;
     }
 }
+
+void organize_setsList_per_year(SetList *sets)
+{
+    
+    Set *lst = sets->first; 
+    Set *lst2 = sets->first->next;     
+
+    while (lst){
+        lst2 = lst->next;
+        while(lst2){
+            if (lst2->year < lst->year){ 
+                char *set_num = lst->set_num;
+                char *name = lst->name;
+                int year = lst->year;
+                char *theme = lst->theme;
+                change_set_data(lst, lst2->set_num, lst2->name, lst2->year, lst2->theme);
+                change_set_data(lst2, set_num, name, year, theme);
+            }
+            lst2 = lst2->next;
+            
+        }
+        lst = lst->next;
+        
+        
+    }   
+
+
+}
+
+
+
+void print_sets_per_theme_year(SetList *sets, char *theme)
+{
+    SetList *organizedSetList = new_sets_list();
+    Set *lst = sets->first;
+    while (lst)
+    {
+        if (strcmp(theme, lst->theme) == 0)
+        {
+            Set *lstCopy = new_set();
+            change_set_data(lstCopy, lst->set_num, lst->name, lst->year, lst->theme);
+            add_set(organizedSetList, lstCopy);
+        }
+        lst = lst->next;
+    }
+    organize_setsList_per_year(organizedSetList); 
+    print_set_list(organizedSetList);
+    
+}
+
+
 
 #pragma endregion

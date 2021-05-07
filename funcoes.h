@@ -9,6 +9,7 @@ extern void add_part(PartsList *list, Part *item);
 extern void change_part_data(Part *part, char *part_num, char *name, char *part_class, int stock);
 extern void print_part_data(Part *part);
 extern void print_part_list(PartsList *parts);
+extern void change_stock(Part *part, int newStock);
 
 #pragma endregion
 
@@ -31,6 +32,9 @@ extern void add_set(SetList *list, Set *item);
 extern void change_set_data(Set *set, char *set_num, char *name, int year, char *theme);
 extern void print_set_data(Set *set);
 extern void print_set_list(SetList *sets);
+extern void organize_setsList_per_year(SetList *sets);
+extern void print_sets_per_theme_year(SetList *sets, char *theme);
+
 
 #pragma endregion
 
