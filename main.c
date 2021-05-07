@@ -22,9 +22,11 @@ int main()
     
     //print_part_list(parts);
 
+    
+    print_part_list(parts);
     printf("\n\n\n");
-
-    //remove_parts_per_class(parts, "testclass");
+    remove_parts_per_class(parts, "testclass");
+    print_part_list(parts);
     
     //print_part_list(parts);
     
@@ -37,7 +39,7 @@ int main()
     change_parts_set_data(partset, "setnumtest", 3, "123num123");
     add_parts_set(partssetslist, partset);
     add_stock_from_partsset(partssetslist, "setnumtest", parts);
-    print_part_list(parts);
+    //print_part_list(parts);
 
     printf("%d\n", total_stock(parts));
 

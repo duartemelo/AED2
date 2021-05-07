@@ -87,8 +87,25 @@ int total_stock(PartsList *parts)
 void remove_parts_per_class(PartsList *parts, char *part_class)
 {
     
-    Part *part = parts->first;
+    Part *part = malloc(sizeof(Part));
     
+    for (part = parts->first; part; part = part->next){
+        if(strcmp(part->part_class, part_class) == 0){
+            if (part->next){
+                part->next->prev = part->prev;
+            } else {
+                parts->last = part->prev;
+            }
+            if (part->prev){
+                part->prev->next = part->next;
+            } else {
+                parts->first = part->next;
+            }
+            free(part);
+        }
+    }
+
+
     while (part)
     {
         if (strcmp(part->part_class, part_class) == 0)
