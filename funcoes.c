@@ -86,33 +86,31 @@ int total_stock(PartsList *parts)
 
 void remove_parts_per_class(PartsList *parts, char *part_class)
 {
-    
+
     Part *part = malloc(sizeof(Part));
-    
-    for (part = parts->first; part; part = part->next){
-        if(strcmp(part->part_class, part_class) == 0){
-            if (part->next){
+
+    for (part = parts->first; part; part = part->next)
+    {
+        if (strcmp(part->part_class, part_class) == 0)
+        {
+            if (part->next)
+            {
                 part->next->prev = part->prev;
-            } else {
+            }
+            else
+            {
                 parts->last = part->prev;
             }
-            if (part->prev){
+            if (part->prev)
+            {
                 part->prev->next = part->next;
-            } else {
+            }
+            else
+            {
                 parts->first = part->next;
             }
             free(part);
         }
-    }
-
-
-    while (part)
-    {
-        if (strcmp(part->part_class, part_class) == 0)
-        {
-            part->stock = 0;
-        }
-        part = part->next;
     }
 }
 
@@ -257,7 +255,6 @@ void add_stock_from_partsset(PartsSetList *list, char *set_num, PartsList *parts
                 if (strcmp(part->part_num, part_num) == 0)
                 {
                     part->stock = part->stock + lst->quantity;
-                    
                 }
                 part = part->next;
             }
@@ -372,6 +369,35 @@ void print_sets_per_theme_year(SetList *sets, char *theme)
     }
     organize_setsList_per_year(organizedSetList);
     print_set_list(organizedSetList);
+}
+
+void remove_sets_per_theme(SetList *sets, char *theme)
+{
+    Set *set = malloc(sizeof(Set));
+
+    for (set = sets->first; set; set = set->next)
+    {
+        if (strcmp(set->theme, theme) == 0)
+        {
+            if (set->next)
+            {
+                set->next->prev = set->prev;
+            }
+            else
+            {
+                sets->last = set->prev;
+            }
+            if (set->prev)
+            {
+                set->prev->next = set->next;
+            }
+            else
+            {
+                sets->first = set->next;
+            }
+            free(set);
+        }
+    }
 }
 
 #pragma endregion

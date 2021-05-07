@@ -6,35 +6,35 @@
 
 int main()
 {
+
+    //FALTAM OS FREES NO FIM!
+
     //printf("PARTS TESTS \n\n\n");
 
     PartsList *parts = new_parts_list();
 
     Part *part = new_part();
-    change_part_data(part, "123num", "test", "123num", 5);    
+    change_part_data(part, "123num", "test", "123num", 5);
     add_part(parts, part);
-    change_stock(part, part->stock+5);
-    
+    change_stock(part, part->stock + 5);
 
     Part *part2 = new_part();
     change_part_data(part2, "123num123", "testname", "testclass", 3);
     add_part(parts, part2);
-    
+
     //print_part_list(parts);
 
-    
     print_part_list(parts);
     printf("\n\n\n");
     remove_parts_per_class(parts, "testclass");
     print_part_list(parts);
-    
+
     //print_part_list(parts);
-    
 
     //printf("PARTS SETS TESTS \n\n\n");
 
     PartsSetList *partssetslist = new_parts_sets_list();
-    
+
     PartsSet *partset = new_parts_set();
     change_parts_set_data(partset, "setnumtest", 3, "123num123");
     add_parts_set(partssetslist, partset);
@@ -42,7 +42,6 @@ int main()
     //print_part_list(parts);
 
     printf("%d\n", total_stock(parts));
-
 
     //print_partset_list(partssetslist);
 
@@ -59,7 +58,7 @@ int main()
     add_set(setList, set2);
 
     Set *set3 = new_set();
-    change_set_data(set3, "setnumtest3", "name3", 2000, "theme1");
+    change_set_data(set3, "setnumtest3", "name3", 2000, "theme2");
     add_set(setList, set3);
 
     Set *set4 = new_set();
@@ -74,9 +73,13 @@ int main()
     change_set_data(set6, "setnumtest4", "name4", 1900, "theme1");
     add_set(setList, set6);
 
+    printf("\n\n\nSETSSETS\n\n\n");
+
+    print_set_list(setList);
+    printf("\n\n\n");
+    remove_sets_per_theme(setList, "theme2");
+    print_set_list(setList);
     //print_sets_per_theme_year(setList, "theme1");
-
-
 
     return 0;
 }

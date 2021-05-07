@@ -39,5 +39,6 @@ extern void print_set_data(Set *set);
 extern void print_set_list(SetList *sets);
 extern void organize_setsList_per_year(SetList *sets);
 extern void print_sets_per_theme_year(SetList *sets, char *theme);
+extern void remove_sets_per_theme(SetList *sets, char *theme);
 
 #pragma endregion
