@@ -141,4 +141,55 @@ SetList *new_sets_list()
     return new;
 }
 
+Set *new_set()
+{
+    Set *new = (Set *)malloc(sizeof(Set));
+    assert(new);
+    return new;
+}
+
+void add_set(SetList *list, Set *item)
+{
+    //se ainda não existir nenhum elemento na lista
+    if (list->first == NULL)
+    {
+        list->first = item;
+        item->next = NULL;
+        item->prev = NULL;
+    }
+    else
+    {
+        list->last->next = item;
+        item->prev = list->last;
+        item->next = NULL;
+    }
+    list->last = item;
+}
+
+void change_set_data(Set *set, char *set_num, char *name, int year, char *theme)
+{
+    set->set_num = set_num;
+    set->name = name;
+    set->year = year;
+    set->theme = theme;
+}
+
+void print_set_data(Set *set)
+{
+    printf("Set_num: %s\n", set->set_num);
+    printf("Set_name: %s\n", set->name);
+    printf("Set_year: %d\n", set->year);
+    printf("Set_theme: %s\n", set->theme);
+}
+
+void print_set_list(SetList *sets)
+{
+    Set *lst = sets->first;
+    while (lst)
+    {
+        print_set_data(lst);
+        lst = lst->next;
+    }
+}
+
 #pragma endregion
