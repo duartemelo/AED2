@@ -14,6 +14,13 @@ PartsList *new_parts_list()
     return new;
 }
 
+Part *new_part()
+{
+    Part *new = (Part *)malloc(sizeof(Part));
+    assert(new);
+    return new;
+}
+
 void add_part(PartsList *list, Part *item)
 {
 
@@ -54,7 +61,7 @@ void print_part_list(PartsList *parts)
     Part *lst = parts->first;
     while (lst)
     {
-        printf("%s\n", lst->name);
+        print_part_data(lst);
         lst = lst->next;
     }
 }
@@ -69,6 +76,13 @@ PartsSetList *new_parts_sets_list()
     assert(new);
 
     new->first = new->last = NULL;
+    return new;
+}
+
+PartsSet *new_parts_set()
+{
+    PartsSet *new = (PartsSet *)malloc(sizeof(PartsSet));
+    assert(new);
     return new;
 }
 
@@ -88,6 +102,30 @@ void add_parts_set(PartsSetList *list, PartsSet *item)
         item->next = NULL;
     }
     list->last = item;
+}
+
+void change_parts_set_data(PartsSet *partset, char *set_num, int quantity, char *part_num)
+{
+    partset->set_num = set_num;
+    partset->quantity = quantity;
+    partset->part_num = part_num;
+}
+
+void print_parts_set_data(PartsSet *partset)
+{
+    printf("Set_num: %s\n", partset->set_num);
+    printf("Quantity: %d\n", partset->quantity);
+    printf("Part_num: %s\n", partset->part_num);
+}
+
+void print_partset_list(PartsSetList *partsset)
+{
+    PartsSet *lst = partsset->first;
+    while (lst)
+    {
+        print_parts_set_data(lst);
+        lst = lst->next;
+    }
 }
 
 #pragma endregion

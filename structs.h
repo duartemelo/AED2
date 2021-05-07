@@ -5,7 +5,8 @@
  * part_class: Classe da peça.
  * Stock: stock da peça existente.
  */
-typedef struct _part{
+typedef struct _part
+{
     char *part_num;
     char *name;
     char *part_class;
@@ -17,7 +18,8 @@ typedef struct _part{
  * @brief Apontadores para início e fim da lista das parts.
  * 
  */
-typedef struct _partsList{
+typedef struct _partsList
+{
     Part *first;
     Part *last;
 } PartsList;
@@ -28,10 +30,11 @@ typedef struct _partsList{
  * quantity: Unidades desta peça necessárias para a construção deste set.
  * part_num: Identificação da peça.
  */
-typedef struct _partsSet{
+typedef struct _partsSet
+{
     char *set_num;
     int quantity;
-    int part_num;
+    char *part_num;
     struct _partsSet *next, *prev;
 } PartsSet;
 
@@ -39,7 +42,8 @@ typedef struct _partsSet{
  * @brief Apontadores para início e fim da lista dos parts sets.
  * 
  */
-typedef struct _partsSetList{
+typedef struct _partsSetList
+{
     PartsSet *first;
     PartsSet *last;
 } PartsSetList;
@@ -51,7 +55,8 @@ typedef struct _partsSetList{
  * year: Ano em que o set foi colocado no mercado.
  * theme: Tema do set.
  */
-typedef struct _set{
+typedef struct _set
+{
     char *set_num;
     char *name;
     int year;
@@ -63,7 +68,8 @@ typedef struct _set{
  * @brief Apontadores para início e fim da lista dos sets.
  * 
  */
-typedef struct _setList{
+typedef struct _setList
+{
     Set *first;
     Set *last;
 } SetList;
