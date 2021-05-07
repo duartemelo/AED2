@@ -20,9 +20,15 @@ int main()
     change_part_data(part2, "123num123", "testname", "testclass", 3);
     add_part(parts, part2);
     
-    //print_part_list(parts);
+    print_part_list(parts);
 
-    //printf("\n\n\n");
+    printf("\n\n\n");
+
+    remove_parts_per_class(parts, "testclass");
+    
+    print_part_list(parts);
+    
+
     //printf("PARTS SETS TESTS \n\n\n");
 
     PartsSetList *partssetslist = new_parts_sets_list();
@@ -61,7 +67,7 @@ int main()
     change_set_data(set6, "setnumtest4", "name4", 1900, "theme1");
     add_set(setList, set6);
 
-    print_sets_per_theme_year(setList, "theme1");
+    //print_sets_per_theme_year(setList, "theme1");
 
 
 

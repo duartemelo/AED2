@@ -10,6 +10,7 @@ extern void print_part_data(Part *part);
 extern void print_part_list(PartsList *parts);
 extern void change_stock(Part *part, int newStock);
 extern int total_stock(PartsList *parts);
+extern void remove_parts_per_class(PartsList *parts, char *part_class);
 
 #pragma endregion
 

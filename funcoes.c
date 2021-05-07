@@ -18,6 +18,7 @@ Part *new_part()
 {
     Part *new = (Part *)malloc(sizeof(Part));
     assert(new);
+    new->stock = 0;
     return new;
 }
 
@@ -80,6 +81,21 @@ int total_stock(PartsList *parts)
         stock = stock + lst->stock;
     }
     return stock;
+}
+
+void remove_parts_per_class(PartsList *parts, char *part_class)
+{
+    
+    Part *part = parts->first;
+    
+    while (part)
+    {
+        if (strcmp(part->part_class, part_class) == 0)
+        {
+            part->stock = 0;
+        }
+        part = part->next;
+    }
 }
 
 #pragma endregion
@@ -207,6 +223,29 @@ void parts_quantity_to_build_set(PartsSetList *list, char *set_num)
         lst->next;
     }
     printf("Total quantity of parts: %d\n", &totalAmount);
+}
+
+void add_stock_from_partsset(PartsSetList *list, char *set_num, PartsList *parts)
+{
+    PartsSet *lst = list->first;
+    while (lst)
+    {
+        if (strcmp(lst->set_num, set_num) == 0)
+        {
+            char *part_num = lst->part_num;
+            Part *part = parts->first;
+            while (part)
+            {
+                if (strcmp(part->part_num, part_num) == 0)
+                {
+                    part->stock = part->stock + lst->quantity;
+                    
+                }
+                part = part->next;
+            }
+        }
+        lst = lst->next;
+    }
 }
 
 #pragma endregion
