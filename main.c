@@ -1,3 +1,14 @@
+/**
+ * @file main.c
+ * @author Duarte Ribeiro de Melo (a21149@alunos.ipca.pt)
+ * @brief Ficheiro principal, que chama funções do ficheiro funcoes.c, do trabalho prático de AED2.
+ * @version 0.1
+ * @date 2021-05-07
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>

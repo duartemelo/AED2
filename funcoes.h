@@ -1,4 +1,13 @@
-
+/**
+ * @file funcoes.h
+ * @author Duarte Ribeiro de Melo (a21149@alunos.ipca.pt)
+ * @brief Assinaturas das funções
+ * @version 0.1
+ * @date 2021-05-07
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 
 #pragma region Parts
 
@@ -11,6 +20,7 @@ extern void print_part_list(PartsList *parts);
 extern void change_stock(Part *part, int newStock);
 extern int total_stock(PartsList *parts);
 extern void remove_parts_per_class(PartsList *parts, char *part_class);
+extern Part most_used_part(PartsList *parts, PartsSetList *partssetslist);
 
 #pragma endregion
 

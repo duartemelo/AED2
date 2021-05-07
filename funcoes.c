@@ -1,3 +1,14 @@
+/**
+ * @file funcoes.c
+ * @author Duarte Ribeiro de Melo (a21149@alunos.ipca.pt)
+ * @brief Funções relativas ao trabalho prático de AED2
+ * @version 0.1
+ * @date 2021-05-07
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -6,6 +17,11 @@
 
 #pragma region Parts
 
+/**
+ * @brief Criação de uma lista de parts.
+ * 
+ * @return PartsList* 
+ */
 PartsList *new_parts_list()
 {
     PartsList *new = (PartsList *)malloc(sizeof(PartsList));
@@ -14,6 +30,11 @@ PartsList *new_parts_list()
     return new;
 }
 
+/**
+ * @brief Criação de um nodo "Part"
+ * 
+ * @return Part* 
+ */
 Part *new_part()
 {
     Part *new = (Part *)malloc(sizeof(Part));
@@ -22,6 +43,12 @@ Part *new_part()
     return new;
 }
 
+/**
+ * @brief Adicionar uma part a uma lista PartsList
+ * 
+ * @param list 
+ * @param item 
+ */
 void add_part(PartsList *list, Part *item)
 {
 
@@ -41,6 +68,15 @@ void add_part(PartsList *list, Part *item)
     list->last = item;
 }
 
+/**
+ * @brief Alterar os dados de uma part
+ * 
+ * @param part 
+ * @param part_num 
+ * @param name 
+ * @param part_class 
+ * @param stock 
+ */
 void change_part_data(Part *part, char *part_num, char *name, char *part_class, int stock)
 {
     part->part_num = part_num;
@@ -49,6 +85,11 @@ void change_part_data(Part *part, char *part_num, char *name, char *part_class, 
     part->stock = stock;
 }
 
+/**
+ * @brief Imprimir os dados de uma part
+ * 
+ * @param part 
+ */
 void print_part_data(Part *part)
 {
     printf("Part_num: %s\n", part->part_num);
@@ -57,6 +98,11 @@ void print_part_data(Part *part)
     printf("Part_stock: %d\n", part->stock);
 }
 
+/**
+ * @brief Imprimir uma lista de parts, reutiliza função print_part_data
+ * 
+ * @param parts 
+ */
 void print_part_list(PartsList *parts)
 {
     Part *lst = parts->first;
@@ -67,11 +113,23 @@ void print_part_list(PartsList *parts)
     }
 }
 
+/**
+ * @brief Alterar o stock de uma part, reutiliza função change_part_data
+ * 
+ * @param part 
+ * @param newStock 
+ */
 void change_stock(Part *part, int newStock)
 {
     change_part_data(part, part->part_num, part->name, part->part_class, newStock);
 }
 
+/**
+ * @brief Devolve o stock total
+ * 
+ * @param parts 
+ * @return int 
+ */
 int total_stock(PartsList *parts)
 {
     int stock = 0;
@@ -84,6 +142,12 @@ int total_stock(PartsList *parts)
     return stock;
 }
 
+/**
+ * @brief Remove parts a partir da classe, alteração dos apontadores e free do nodo
+ * 
+ * @param parts 
+ * @param part_class 
+ */
 void remove_parts_per_class(PartsList *parts, char *part_class)
 {
 
@@ -114,10 +178,48 @@ void remove_parts_per_class(PartsList *parts, char *part_class)
     }
 }
 
+/**
+ * @brief Peça mais usada nos partssets, devolve a mesma
+ * 
+ * @param parts 
+ * @param partssetslist 
+ * @return Part 
+ */
+Part most_used_part(PartsList *parts, PartsSetList *partssetslist)
+{
+    Part *part = malloc(sizeof(Part));
+    PartsSet *partset = malloc(sizeof(PartsSet));
+    int contadorMaisUsada = 0;
+    int contadorCompara;
+    Part *partMaisUsada = NULL;
+    for (part = parts->first; part; part = part->next)
+    {
+        contadorCompara = 0;
+        for (partset = partssetslist->first; partset; partset = partset->next)
+        {
+            if (strcmp(partset->part_num, part->part_num) == 0)
+            {
+                contadorCompara++;
+            }
+        }
+        if (contadorCompara > contadorMaisUsada)
+        {
+            contadorMaisUsada = contadorCompara;
+            partMaisUsada = part;
+        }
+    }
+    return *partMaisUsada;
+}
+
 #pragma endregion
 
 #pragma region Parts Sets
 
+/**
+ * @brief Nova lista de partsSets
+ * 
+ * @return PartsSetList* 
+ */
 PartsSetList *new_parts_sets_list()
 {
     PartsSetList *new = (PartsSetList *)malloc(sizeof(PartsSetList));
@@ -127,6 +229,11 @@ PartsSetList *new_parts_sets_list()
     return new;
 }
 
+/**
+ * @brief Novo nodo parts_set
+ * 
+ * @return PartsSet* 
+ */
 PartsSet *new_parts_set()
 {
     PartsSet *new = (PartsSet *)malloc(sizeof(PartsSet));
@@ -134,6 +241,12 @@ PartsSet *new_parts_set()
     return new;
 }
 
+/**
+ * @brief Adicionar nodo parts_set à lista partsSetList
+ * 
+ * @param list 
+ * @param item 
+ */
 void add_parts_set(PartsSetList *list, PartsSet *item)
 {
     //se ainda não existir nenhum elemento na lista
@@ -152,6 +265,14 @@ void add_parts_set(PartsSetList *list, PartsSet *item)
     list->last = item;
 }
 
+/**
+ * @brief Alterar data dum part_set
+ * 
+ * @param partset 
+ * @param set_num 
+ * @param quantity 
+ * @param part_num 
+ */
 void change_parts_set_data(PartsSet *partset, char *set_num, int quantity, char *part_num)
 {
     partset->set_num = set_num;
@@ -159,6 +280,11 @@ void change_parts_set_data(PartsSet *partset, char *set_num, int quantity, char 
     partset->part_num = part_num;
 }
 
+/**
+ * @brief Imprimir dados de um part_set
+ * 
+ * @param partset 
+ */
 void print_parts_set_data(PartsSet *partset)
 {
     printf("Set_num: %s\n", partset->set_num);
@@ -166,6 +292,11 @@ void print_parts_set_data(PartsSet *partset)
     printf("Part_num: %s\n", partset->part_num);
 }
 
+/**
+ * @brief Imprimir lista parts_set, reutiliza função print_parts_set_data
+ * 
+ * @param partsset 
+ */
 void print_partset_list(PartsSetList *partsset)
 {
     PartsSet *lst = partsset->first;
@@ -176,6 +307,14 @@ void print_partset_list(PartsSetList *partsset)
     }
 }
 
+/**
+ * @brief Imprime as parts num partset que correspondem a uma determinada classe
+ * 
+ * @param list 
+ * @param parts 
+ * @param part_class 
+ * @param set_num 
+ */
 void parts_in_partsset_per_class(PartsSetList *list, PartsList *parts, char *part_class, char *set_num)
 {
     PartsSet *lst = list->first;
@@ -197,6 +336,13 @@ void parts_in_partsset_per_class(PartsSetList *list, PartsList *parts, char *par
     }
 }
 
+/**
+ * @brief Imprime as partes necessárias para construir um set (conjunto)
+ * 
+ * @param list 
+ * @param parts 
+ * @param set_num 
+ */
 void parts_to_build_set(PartsSetList *list, PartsList *parts, char *set_num)
 {
     int found;
@@ -222,6 +368,12 @@ void parts_to_build_set(PartsSetList *list, PartsList *parts, char *set_num)
     }
 }
 
+/**
+ * @brief Imprime as quantidades de peças para construir um set
+ * 
+ * @param list 
+ * @param set_num 
+ */
 void parts_quantity_to_build_set(PartsSetList *list, char *set_num)
 {
     int totalAmount = 0;
@@ -241,6 +393,13 @@ void parts_quantity_to_build_set(PartsSetList *list, char *set_num)
     printf("Total quantity of parts: %d\n", &totalAmount);
 }
 
+/**
+ * @brief Adicionar stock de peças a partir de um partset
+ * 
+ * @param list 
+ * @param set_num 
+ * @param parts 
+ */
 void add_stock_from_partsset(PartsSetList *list, char *set_num, PartsList *parts)
 {
     PartsSet *lst = list->first;
@@ -267,6 +426,11 @@ void add_stock_from_partsset(PartsSetList *list, char *set_num, PartsList *parts
 
 #pragma region Sets List
 
+/**
+ * @brief Nova lista de sets
+ * 
+ * @return SetList* 
+ */
 SetList *new_sets_list()
 {
     SetList *new = (SetList *)malloc(sizeof(SetList));
@@ -276,6 +440,11 @@ SetList *new_sets_list()
     return new;
 }
 
+/**
+ * @brief Novo nodo set
+ * 
+ * @return Set* 
+ */
 Set *new_set()
 {
     Set *new = (Set *)malloc(sizeof(Set));
@@ -283,6 +452,12 @@ Set *new_set()
     return new;
 }
 
+/**
+ * @brief Adicionar nodo set à lista SetList
+ * 
+ * @param list 
+ * @param item 
+ */
 void add_set(SetList *list, Set *item)
 {
     //se ainda não existir nenhum elemento na lista
@@ -301,6 +476,15 @@ void add_set(SetList *list, Set *item)
     list->last = item;
 }
 
+/**
+ * @brief Alterar dados de um set
+ * 
+ * @param set 
+ * @param set_num 
+ * @param name 
+ * @param year 
+ * @param theme 
+ */
 void change_set_data(Set *set, char *set_num, char *name, int year, char *theme)
 {
     set->set_num = set_num;
@@ -309,6 +493,11 @@ void change_set_data(Set *set, char *set_num, char *name, int year, char *theme)
     set->theme = theme;
 }
 
+/**
+ * @brief Imprimir dados de um set
+ * 
+ * @param set 
+ */
 void print_set_data(Set *set)
 {
     printf("Set_num: %s\n", set->set_num);
@@ -317,6 +506,11 @@ void print_set_data(Set *set)
     printf("Set_theme: %s\n", set->theme);
 }
 
+/**
+ * @brief Imprimir dados da lista SetList, reutiliza função print_set_data
+ * 
+ * @param sets 
+ */
 void print_set_list(SetList *sets)
 {
     Set *lst = sets->first;
@@ -327,6 +521,12 @@ void print_set_list(SetList *sets)
     }
 }
 
+/**
+ * @brief Organiza setList pelo ano, apontadores mantêm-se, alteram os dados
+ * (na altura, alterar os apontadores deu-me problemas então optei por esta forma, considero esta abordagem menos boa (caso mude a struct dos sets, terei de mudar a função também))
+ * 
+ * @param sets 
+ */
 void organize_setsList_per_year(SetList *sets)
 {
 
@@ -353,6 +553,12 @@ void organize_setsList_per_year(SetList *sets)
     }
 }
 
+/**
+ * @brief Print sets de um determinado tema pelo ano, utiliza funções organize_setsList_per_year e print_set_list
+ * 
+ * @param sets 
+ * @param theme 
+ */
 void print_sets_per_theme_year(SetList *sets, char *theme)
 {
     SetList *organizedSetList = new_sets_list();
@@ -371,6 +577,12 @@ void print_sets_per_theme_year(SetList *sets, char *theme)
     print_set_list(organizedSetList);
 }
 
+/**
+ * @brief Remove sets de um determinado tema
+ * 
+ * @param sets 
+ * @param theme 
+ */
 void remove_sets_per_theme(SetList *sets, char *theme)
 {
     Set *set = malloc(sizeof(Set));

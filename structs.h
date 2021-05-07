@@ -1,4 +1,15 @@
 /**
+ * @file structs.h
+ * @author Duarte Ribeiro de Melo (a21149@alunos.ipca.pt)
+ * @brief Structs relativas ao trabalho prático de AED2
+ * @version 0.1
+ * @date 2021-05-07
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
+/**
  * @brief 
  * part_num: Identificação da peça.
  * name: Nome da peça.
