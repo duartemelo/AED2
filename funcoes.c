@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include <unistd.h>
 #include "structs.h"
 
 #pragma region Parts
@@ -92,10 +93,7 @@ void change_part_data(Part *part, char *part_num, char *name, char *part_class, 
  */
 void print_part_data(Part *part)
 {
-    printf("Part_num: %s\n", part->part_num);
-    printf("Part_name: %s\n", part->name);
-    printf("Part_class: %s\n", part->part_class);
-    printf("Part_stock: %d\n", part->stock);
+    printf("Part_num: %s\nPart_name: %s\nPart_class: %s\nPart_stock: %d\n", part->part_num, part->name, part->part_class, part->stock);
 }
 
 /**
@@ -109,6 +107,7 @@ void print_part_list(PartsList *parts)
     while (lst)
     {
         print_part_data(lst);
+        printf("\n");
         lst = lst->next;
     }
 }
@@ -122,6 +121,21 @@ void print_part_list(PartsList *parts)
 void change_stock(Part *part, int newStock)
 {
     change_part_data(part, part->part_num, part->name, part->part_class, newStock);
+}
+
+Part *find_part_in_list(char *part_num, PartsList *parts)
+{
+    Part *lst = parts->first;
+    int find = 0;
+    while (lst || find != 0)
+    {
+        if (strcmp(lst->part_num, part_num) == 0)
+        {
+            return lst;
+        }
+        lst = lst->next;
+    }
+    return NULL;
 }
 
 /**
@@ -185,13 +199,13 @@ void remove_parts_per_class(PartsList *parts, char *part_class)
  * @param partssetslist 
  * @return Part 
  */
-Part most_used_part(PartsList *parts, PartsSetList *partssetslist)
+Part *most_used_part(PartsList *parts, PartsSetList *partssetslist)
 {
     Part *part = malloc(sizeof(Part));
     PartsSet *partset = malloc(sizeof(PartsSet));
     int contadorMaisUsada = 0;
     int contadorCompara;
-    Part *partMaisUsada = NULL;
+    Part *partMaisUsada = malloc(sizeof(Part));
     for (part = parts->first; part; part = part->next)
     {
         contadorCompara = 0;
@@ -205,10 +219,11 @@ Part most_used_part(PartsList *parts, PartsSetList *partssetslist)
         if (contadorCompara > contadorMaisUsada)
         {
             contadorMaisUsada = contadorCompara;
-            partMaisUsada = part;
+
+            change_part_data(partMaisUsada, part->part_num, part->name, part->part_class, part->stock);
         }
     }
-    return *partMaisUsada;
+    return partMaisUsada;
 }
 
 #pragma endregion
@@ -242,30 +257,6 @@ PartsSet *new_parts_set()
 }
 
 /**
- * @brief Adicionar nodo parts_set à lista partsSetList
- * 
- * @param list 
- * @param item 
- */
-void add_parts_set(PartsSetList *list, PartsSet *item)
-{
-    //se ainda não existir nenhum elemento na lista
-    if (list->first == NULL)
-    {
-        list->first = item;
-        item->next = NULL;
-        item->prev = NULL;
-    }
-    else
-    {
-        list->last->next = item;
-        item->prev = list->last;
-        item->next = NULL;
-    }
-    list->last = item;
-}
-
-/**
  * @brief Alterar data dum part_set
  * 
  * @param partset 
@@ -281,17 +272,40 @@ void change_parts_set_data(PartsSet *partset, char *set_num, int quantity, char 
 }
 
 /**
+ * @brief Adicionar nodo parts_set à lista partsSetList
+ * 
+ * @param list 
+ * @param item 
+ */
+void add_parts_set(PartsSetList *list, PartsSet *item)
+{
+    PartsSet *new = malloc(sizeof(PartsSet));
+    change_parts_set_data(new, item->set_num, item->quantity, item->part_num);
+    //se ainda não existir nenhum elemento na lista
+    if (list->first == NULL)
+    {
+        list->first = new;
+        new->next = NULL;
+        new->prev = NULL;
+    }
+    else
+    {
+        list->last->next = new;
+        new->prev = list->last;
+        new->next = NULL;
+    }
+    list->last = new;
+}
+
+/**
  * @brief Imprimir dados de um part_set
  * 
  * @param partset 
  */
 void print_parts_set_data(PartsSet *partset)
 {
-    printf("Set_num: %s\n", partset->set_num);
-    printf("Quantity: %d\n", partset->quantity);
-    printf("Part_num: %s\n", partset->part_num);
+    printf("Set_num: %s\nQuantity: %d\nPart_num:%s\n", partset->set_num, partset->quantity, partset->part_num);
 }
-
 /**
  * @brief Imprimir lista parts_set, reutiliza função print_parts_set_data
  * 
@@ -303,6 +317,7 @@ void print_partset_list(PartsSetList *partsset)
     while (lst)
     {
         print_parts_set_data(lst);
+        printf("\n");
         lst = lst->next;
     }
 }
@@ -345,21 +360,19 @@ void parts_in_partsset_per_class(PartsSetList *list, PartsList *parts, char *par
  */
 void parts_to_build_set(PartsSetList *list, PartsList *parts, char *set_num)
 {
-    int found;
+
     PartsSet *lst = list->first;
     while (lst)
     {
         if (strcmp(lst->set_num, set_num) == 0)
         {
-            found = 0;
-            char *part_num = lst->part_num;
+
             Part *part = parts->first;
-            while (part && found != 0)
+            while (part)
             {
-                if (strcmp(part->part_num, part_num) == 0)
+                if (strcmp(part->part_num, lst->part_num) == 0)
                 {
                     print_part_data(part);
-                    found = 1;
                 }
                 part = part->next;
             }
@@ -380,7 +393,6 @@ void parts_quantity_to_build_set(PartsSetList *list, char *set_num)
     PartsSet *lst = list->first;
     while (lst)
     {
-
         if (strcmp(lst->set_num, set_num) == 0)
         {
             printf("%s\n", lst->part_num);
@@ -388,9 +400,9 @@ void parts_quantity_to_build_set(PartsSetList *list, char *set_num)
             totalAmount += lst->quantity;
         }
 
-        lst->next;
+        lst = lst->next;
     }
-    printf("Total quantity of parts: %d\n", &totalAmount);
+    printf("Total quantity of parts: %d\n", totalAmount);
 }
 
 /**
@@ -500,10 +512,7 @@ void change_set_data(Set *set, char *set_num, char *name, int year, char *theme)
  */
 void print_set_data(Set *set)
 {
-    printf("Set_num: %s\n", set->set_num);
-    printf("Set_name: %s\n", set->name);
-    printf("Set_year: %d\n", set->year);
-    printf("Set_theme: %s\n", set->theme);
+    printf("Set_num: %s\nSet_name: %s\nSet_year: %d\nSet_theme: %s\n", set->set_num, set->name, set->year, set->theme);
 }
 
 /**
@@ -609,6 +618,216 @@ void remove_sets_per_theme(SetList *sets, char *theme)
             }
             free(set);
         }
+    }
+}
+
+#pragma endregion
+
+#pragma region Data Reading
+
+/**
+ * @brief Procedimento para ler o ficheiro parts e passar os dados para a lista correspondente
+ * 
+ * @param list 
+ */
+void readParts(PartsList *list)
+{
+    FILE *partsFile = fopen("data/parts.tsv", "r");
+
+    char readingBuffer[60];
+    //int contador = 0;
+
+    fscanf(partsFile, "%[^\n]", readingBuffer);
+    while (!feof(partsFile))
+    {
+        //printf("%d\n", contador);
+        //contador++;
+        Part *aux = new_part();
+
+        char *part_num = malloc(300);
+        char *name = malloc(300);
+        char *part_class = malloc(300);
+        int stock;
+
+        fscanf(partsFile, "\n%[^\t]\t%[^\t]\t%[^\t]\t%d", part_num, name, part_class, &stock);
+        change_part_data(aux, part_num, name, part_class, stock);
+        add_part(list, aux);
+    }
+}
+
+/**
+ * @brief Procedimento para ler o ficheiro parts_sets e passar os dados para a lista correspondente
+ * 
+ * @param list 
+ */
+void readPartsSets(PartsSetList *list)
+{
+    FILE *partsSetsFile = fopen("data/parts_sets.tsv", "r");
+
+    char readingBuffer[60];
+    //int contador = 0;
+
+    fscanf(partsSetsFile, "%[^\n]", readingBuffer);
+
+    while (!feof(partsSetsFile))
+    {
+        //printf("%d\n", contador);
+        //contador++;
+        PartsSet *aux = new_parts_set();
+        char *set_num = malloc(300);
+        int quantity;
+        char *part_num = malloc(300);
+        fscanf(partsSetsFile, "\n%[^\t]\t%d\t%[^\n]", set_num, &quantity, part_num);
+        change_parts_set_data(aux, set_num, quantity, part_num);
+        add_parts_set(list, aux);
+    }
+}
+
+/**
+ * @brief Procedimento para ler o ficheiro sets e passar os dados para a lista correspondente
+ * 
+ * @param list 
+ */
+void readSets(SetList *list)
+{
+    FILE *setsFile = fopen("data/sets.tsv", "r");
+
+    char readingBuffer[60];
+    //int contador = 0;
+    fscanf(setsFile, "%[^\n]", readingBuffer);
+    while (!feof(setsFile))
+    {
+        //printf("%d\n", contador);
+        //contador++;
+        Set *aux = new_set();
+        char *set_num = malloc(300);
+        char *name = malloc(300);
+        int year;
+        char *theme = malloc(300);
+
+        fscanf(setsFile, "\n%[^\t]\t%[^\t]\t%d\t%[^\n]", set_num, name, &year, theme);
+        change_set_data(aux, set_num, name, year, theme);
+        add_set(list, aux);
+    }
+}
+
+#pragma endregion
+
+#pragma region Menu
+
+void textoMenu()
+{
+    system("cls");
+    printf("Escreva a sua opcao: \n1 - Conjuntos de determinado tema (ord por ano).\n2 - Pecas de determinado tipo em determinado conjunto\n3 - Pecas necessárias para construir um conjunto\n4 - Total pecas em stock\n5 - Total de pecas num conjunto\n6 - Peca utilizada em mais conjuntos diferentes\n7 - Alterar num de pecas em stock\n8 - Adicao de stock pelo identificador do conjunto\n9 - Remover todas as pecas de uma classe\n10 - Remover todos os sets de um tema\n0 - Sair\n");
+}
+
+void menu(PartsList *partsList, PartsSetList *partsSetList, SetList *setList)
+{
+    int opcao;
+    textoMenu();
+    scanf("%d", &opcao);
+    getchar();
+    printf("\n");
+    while (opcao != 0)
+    {
+        switch (opcao)
+        {
+        case 1:
+            printf("Theme: ");
+            char *input = malloc(150);
+
+            fgets(input, 150, stdin);
+            input[strlen(input) - 1] = '\0';
+            printf("\n");
+            print_sets_per_theme_year(setList, input);
+            free(input);
+            break;
+        case 2:
+            printf("Part class: ");
+            char *input2 = malloc(150);
+            fgets(input2, 150, stdin);
+            input2[strlen(input2) - 1] = '\0';
+            printf("\n");
+
+            printf("Set_num: ");
+            char *input3 = malloc(150);
+            fgets(input3, 150, stdin);
+            input3[strlen(input3) - 1] = '\0';
+            printf("\n");
+
+            parts_in_partsset_per_class(partsSetList, partsList, input2, input3);
+            free(input2);
+            free(input3);
+            break;
+        case 3:
+            printf("Set num: ");
+            char *set_num = malloc(150);
+            fgets(set_num, 150, stdin);
+            set_num[strlen(set_num) - 1] = '\0';
+            printf("\n");
+            parts_to_build_set(partsSetList, partsList, set_num);
+            free(set_num);
+            break;
+        case 4:
+            printf("Stock total: %d\n", total_stock(partsList));
+            break;
+        case 5:
+            printf("Set num: ");
+            fgets(set_num, 150, stdin);
+            set_num[strlen(set_num) - 1] = '\0';
+            printf("\n");
+            parts_quantity_to_build_set(partsSetList, set_num);
+            free(set_num);
+            break;
+        case 6:
+            print_part_data(most_used_part(partsList, partsSetList));
+            break;
+        case 7:
+            printf("Part num: ");
+            char *part_num = malloc(150);
+            fgets(part_num, 150, stdin);
+            part_num[strlen(part_num) - 1] = '\0';
+            printf("\n");
+            printf("New stock: ");
+            int newStock;
+            scanf("%d", &newStock);
+            change_stock(find_part_in_list(part_num, partsList), newStock);
+            free(part_num);
+            break;
+        case 8:
+            printf("Set_num: ");
+            fgets(set_num, 150, stdin);
+            set_num[strlen(set_num) - 1] = '\0';
+            printf("\n");
+            add_stock_from_partsset(partsSetList, set_num, partsList);
+            break;
+        case 9:
+            printf("Part class: ");
+            char *part_class = malloc(150);
+            fgets(part_class, 150, stdin);
+            part_class[strlen(part_class) - 1] = '\0';
+            printf("\n");
+            remove_parts_per_class(partsList, part_class);
+            free(part_class);
+            break;
+        case 10:
+            printf("Theme: ");
+            char *set_theme = malloc(150);
+            fgets(set_theme, 150, stdin);
+            set_theme[strlen(set_theme) - 1] = '\0';
+            printf("\n");
+            remove_sets_per_theme(setList, set_theme);
+            free(set_theme);
+            break;
+        }
+        
+        
+
+        sleep(5);
+        textoMenu();
+        scanf("%d", &opcao);
+        getchar();
+        printf("\n");
     }
 }
 

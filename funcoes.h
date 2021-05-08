@@ -9,6 +9,9 @@
  * 
  */
 
+
+
+
 #pragma region Parts
 
 extern PartsList *new_parts_list();
@@ -18,9 +21,10 @@ extern void change_part_data(Part *part, char *part_num, char *name, char *part_
 extern void print_part_data(Part *part);
 extern void print_part_list(PartsList *parts);
 extern void change_stock(Part *part, int newStock);
+extern Part *find_part_in_list(char *part_num, PartsList *parts);
 extern int total_stock(PartsList *parts);
 extern void remove_parts_per_class(PartsList *parts, char *part_class);
-extern Part most_used_part(PartsList *parts, PartsSetList *partssetslist);
+extern Part *most_used_part(PartsList *parts, PartsSetList *partssetslist);
 
 #pragma endregion
 
@@ -52,3 +56,16 @@ extern void print_sets_per_theme_year(SetList *sets, char *theme);
 extern void remove_sets_per_theme(SetList *sets, char *theme);
 
 #pragma endregion
+
+#pragma region Data Readiong
+
+extern void readParts(PartsList *list);
+extern void readPartsSets(PartsSetList *list);
+extern void readSets(SetList *list);
+
+#pragma endregion
+
+#pragma region Menu
+
+extern void textoMenu();
+extern void menu(PartsList *partsList, PartsSetList *partsSetList, SetList *setList);
